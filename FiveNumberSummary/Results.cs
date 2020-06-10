@@ -7,6 +7,7 @@ namespace FiveNumberSummary
 {
     public class Results : ViewModelBase
     {
+        public string Date { get; set; }
         public double Min { get; set; }
         public double Q1 { get; set; }
         public double Med { get; set; }

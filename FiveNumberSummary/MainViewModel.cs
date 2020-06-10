@@ -11,12 +11,18 @@ namespace FiveNumberSummary
 {
     public class MainViewModel : ViewModelBase
     {
-
+        //////////////////////////////////////
+        //Private Variables
+        //////////////////////////////////////
         private string _input;
         private Results _previousResult;
         private ObservableCollection<Results> _previousResults;
         private ICommand _submitCommand;
 
+        //////////////////////////////////////
+        //Public Variables
+        //////////////////////////////////////
+        public int TotalItems;
         public string Input
         {
             get => _input;
@@ -45,7 +51,6 @@ namespace FiveNumberSummary
                 OnPropertyChanged();
             }
         }
-
         public ICommand SubmitCommand
         {
             get
@@ -58,11 +63,8 @@ namespace FiveNumberSummary
             }
         }
 
-        public ICommand CalculateCommand { get; set; }
-
         public MainViewModel()
         {
-            //CalculateCommand = new CalculateCommandDef(this);
             PreviousResult = new Results();
             PreviousResults = new ObservableCollection<Results>();
             PreviousResults.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(PreviousResults_CollectionChanged);
@@ -74,22 +76,39 @@ namespace FiveNumberSummary
             OnPropertyChanged();
         }
 
-
+        /// <summary>
+        /// Calculates the five number summary, stores it in a object, then adds it to OberservableCollection
+        /// </summary>
         private void Submit()
         {
             var obj = new Calculations();
-
             obj.UserInput = Input;
-            MessageBox.Show(Input);
+            
+
+            //get input and sort
             double[] inputArray = obj.UserInput.Split(',').Select(n => Convert.ToDouble(n)).ToArray();
             Array.Sort(inputArray);
+            
+            //calculate and store values
             PreviousResult.Min = obj.Min(inputArray);
             PreviousResult.Q1 = obj.Percentile(inputArray, 25);
             PreviousResult.Med = obj.Percentile(inputArray, 50);
             PreviousResult.Q3 = obj.Percentile(inputArray, 75);
             PreviousResult.Max = obj.Max(inputArray);
+            PreviousResult.Date = DateTime.Now.ToString("h:mm:ss tt");
+
+            //add object to ObservableCollection
             PreviousResults.Add(PreviousResult);
             PreviousResult = new Results();
+            TotalItems++;
+
+            //once 5 items begin removing first one inserted
+            if( TotalItems > 4)
+            {
+                PreviousResults.Clear();
+                TotalItems = 0;
+            }
+
 
 
         }
