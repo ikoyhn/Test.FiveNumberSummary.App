@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
+using System.Windows;
 using System.Windows.Input;
 
 namespace FiveNumberSummary
@@ -17,6 +20,7 @@ namespace FiveNumberSummary
         private double _q3;
         private double _max;
 
+        private ObservableCollection<Results> _previousResult;
 
         public string Input
         {
@@ -73,17 +77,26 @@ namespace FiveNumberSummary
             }
         }
 
+
+        public ObservableCollection<Results> PreviousResult
+        {
+            get
+            {
+
+                this._previousResult = new ObservableCollection<Results>();
+                this._previousResult.Add(new Results() { Min = _min, Q1 = 4, Med = 3, Q3 = 2, Max = 1 });
+                return this._previousResult;
+            }
+        }
+
+
         public ICommand CalculateCommand { get; set; }
 
 
         public MainViewModel()
         {
             CalculateCommand = new CalculateCommandDef(this);
-            var testList = new List<Calculations>();
-            foreach (var calc in testList)
-            {
 
-            }
         }
 
         public void Calculate()
@@ -99,6 +112,13 @@ namespace FiveNumberSummary
             Med = obj.Percentile(inputArray, 50);
             Q3 = obj.Percentile(inputArray, 75);
             Max = obj.Max(inputArray);
+
+            var Result = new Results();
+            Result.Min = Min;
+            Result.Q1 = Q1;
+            Result.Med = Med;
+            Result.Q3 = Q3;
+            Result.Max = Max;
 
         }
     }

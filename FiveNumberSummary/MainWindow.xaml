@@ -20,7 +20,7 @@
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="25"/>
+            <RowDefinition Height="*"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
@@ -36,28 +36,40 @@
         </Grid.ColumnDefinitions>
 
         <Label Grid.Row="1" Grid.Column="1" FontSize="18" Content="Enter least 3 numbers (separated by a comma )" Grid.ColumnSpan="4"/>
-
         <TextBox Grid.Row="2" Grid.Column="1" Margin="8" Grid.ColumnSpan="5" Text="{Binding Path=Input, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
-
+        
+        <Label Grid.Row="6" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontWeight="ExtraBold" Content="Previous Values"/>
+        <DataGrid Grid.Row="7" Grid.Column="2" Grid.ColumnSpan="3" Grid.RowSpan="3" ItemsSource="{Binding Path=PreviousResult}" AutoGenerateColumns="False">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Minimum" Width="87" Binding="{Binding Min}"/>
+                <DataGridTextColumn Header="Q1" Width="87" Binding="{Binding Q1}"/>
+                <DataGridTextColumn Header="Median" Width="87" Binding="{Binding Med}"/>
+                <DataGridTextColumn Header="Q3" Width="87" Binding="{Binding Q3}"/>
+                <DataGridTextColumn Header="Maximum" Width="87" Binding="{Binding Max}"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        
         <Button x:Name="CalculateButton" Grid.Row="3" Grid.Column="5" Content="Calculate" Margin="8" Command="{Binding Path=CalculateCommand}"/>
 
-        <Label Grid.Row="8" Grid.Column="1" Content="Minimum" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBox  Grid.Row="9" Grid.Column="1" Margin="8" IsReadOnly="True" Text="{Binding Path=Min}" IsEnabled="{Binding ElementName=CalculateButton, Path=IsEnabled}"/>
+        <Label Grid.Row="4" Grid.Column="1" Content="Minimum" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+        <TextBox  Grid.Row="5" Grid.Column="1" Margin="8" IsReadOnly="True" Text="{Binding Path=Min}" IsEnabled="{Binding ElementName=CalculateButton, Path=IsEnabled}"/>
 
-        <Label Grid.Row="8" Grid.Column="2" Content="Q1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBox  Grid.Row="9" Grid.Column="2" Margin="8" IsReadOnly="True" Text="{Binding Path=Q1}"/>
+        <Label Grid.Row="4" Grid.Column="2" Content="Q1" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+        <TextBox  Grid.Row="5" Grid.Column="2" Margin="8" IsReadOnly="True" Text="{Binding Path=Q1}"/>
 
-        <Label Grid.Row="8" Grid.Column="3" Content="Median" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBox Grid.Row="9" Grid.Column="3" Margin="8" IsReadOnly="True" Text="{Binding Path=Med}"/>
+        <Label Grid.Row="4" Grid.Column="3" Content="Median" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+        <TextBox Grid.Row="5" Grid.Column="3" Margin="8" IsReadOnly="True" Text="{Binding Path=Med}"/>
 
-        <Label Grid.Row="8" Grid.Column="4" Content="Q3" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBox  Grid.Row="9" Grid.Column="4" Margin="8" IsReadOnly="True" Text="{Binding Path=Q3}"/>
+        <Label Grid.Row="4" Grid.Column="4" Content="Q3" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+        <TextBox  Grid.Row="5" Grid.Column="4" Margin="8" IsReadOnly="True" Text="{Binding Path=Q3}"/>
 
 
-        <Label Grid.Row="8" Grid.Column="5" Content="Maximum" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBox  Grid.Row="9" Grid.Column="5" Margin="8" IsReadOnly="True" Text="{Binding Path=Max}"/>
+        <Label Grid.Row="4" Grid.Column="5" Content="Maximum" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
+        <TextBox  Grid.Row="5" Grid.Column="5" Margin="8" IsReadOnly="True" Text="{Binding Path=Max}"/>
 
 
 
     </Grid>
+    
+    
 </Window>
