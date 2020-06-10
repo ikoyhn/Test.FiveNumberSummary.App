@@ -12,15 +12,10 @@ namespace FiveNumberSummary
     public class MainViewModel : ViewModelBase
     {
 
-        //Private Variables
         private string _input;
-        private double _min;
-        private double _q1;
-        private double _med;
-        private double _q3;
-        private double _max;
-
-        private ObservableCollection<Results> _previousResult;
+        private Results _previousResult;
+        private ObservableCollection<Results> _previousResults;
+        private ICommand _submitCommand;
 
         public string Input
         {
@@ -31,94 +26,71 @@ namespace FiveNumberSummary
                 OnPropertyChanged();
             }
         }
-        public double Min
+
+        public Results PreviousResult 
         {
-            get => _min;
-            set
-            {
-                _min = value;
+            get { return _previousResult; } 
+            set 
+            { 
+                _previousResult = value;
                 OnPropertyChanged();
-            }
+            } 
         }
-        public double Q1
+        public ObservableCollection<Results> PreviousResults
         {
-            get => _q1;
+            get { return _previousResults; }
             set
             {
-                _q1 = value;
-                OnPropertyChanged();
-            }
-        }
-        public double Med
-        {
-            get => _med;
-            set
-            {
-                _med = value;
-                OnPropertyChanged();
-            }
-        }
-        public double Q3
-        {
-            get => _q3;
-            set
-            {
-                _q3 = value;
-                OnPropertyChanged();
-            }
-        }
-        public double Max
-        {
-            get => _max;
-            set
-            {
-                _max = value;
+                _previousResults = value;
                 OnPropertyChanged();
             }
         }
 
-
-        public ObservableCollection<Results> PreviousResult
+        public ICommand SubmitCommand
         {
             get
             {
-
-                this._previousResult = new ObservableCollection<Results>();
-                this._previousResult.Add(new Results() { Min = _min, Q1 = 4, Med = 3, Q3 = 2, Max = 1 });
-                return this._previousResult;
+                if(_submitCommand == null)
+                {
+                    _submitCommand = new RelayCommand(param => this.Submit(), null);
+                }
+                return _submitCommand;
             }
         }
 
-
         public ICommand CalculateCommand { get; set; }
-
 
         public MainViewModel()
         {
-            CalculateCommand = new CalculateCommandDef(this);
+            //CalculateCommand = new CalculateCommandDef(this);
+            PreviousResult = new Results();
+            PreviousResults = new ObservableCollection<Results>();
+            PreviousResults.CollectionChanged += new System.Collections.Specialized.NotifyCollectionChangedEventHandler(PreviousResults_CollectionChanged);
 
         }
 
-        public void Calculate()
+        void PreviousResults_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            OnPropertyChanged();
+        }
+
+
+        private void Submit()
         {
             var obj = new Calculations();
+
             obj.UserInput = Input;
+            MessageBox.Show(Input);
             double[] inputArray = obj.UserInput.Split(',').Select(n => Convert.ToDouble(n)).ToArray();
-
             Array.Sort(inputArray);
+            PreviousResult.Min = obj.Min(inputArray);
+            PreviousResult.Q1 = obj.Percentile(inputArray, 25);
+            PreviousResult.Med = obj.Percentile(inputArray, 50);
+            PreviousResult.Q3 = obj.Percentile(inputArray, 75);
+            PreviousResult.Max = obj.Max(inputArray);
+            PreviousResults.Add(PreviousResult);
+            PreviousResult = new Results();
 
-            Min = obj.Min(inputArray);
-            Q1 = obj.Percentile(inputArray, 25);
-            Med = obj.Percentile(inputArray, 50);
-            Q3 = obj.Percentile(inputArray, 75);
-            Max = obj.Max(inputArray);
-
-            var Result = new Results();
-            Result.Min = Min;
-            Result.Q1 = Q1;
-            Result.Med = Med;
-            Result.Q3 = Q3;
-            Result.Max = Max;
 
         }
     }

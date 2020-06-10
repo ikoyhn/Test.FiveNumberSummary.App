@@ -39,7 +39,7 @@
         <TextBox Grid.Row="2" Grid.Column="1" Margin="8" Grid.ColumnSpan="5" Text="{Binding Path=Input, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
         
         <Label Grid.Row="6" Grid.Column="3" HorizontalAlignment="Center" VerticalAlignment="Bottom" FontWeight="ExtraBold" Content="Previous Values"/>
-        <DataGrid Grid.Row="7" Grid.Column="2" Grid.ColumnSpan="3" Grid.RowSpan="3" ItemsSource="{Binding Path=PreviousResult}" AutoGenerateColumns="False">
+        <DataGrid Grid.Row="7" Grid.Column="2" Grid.ColumnSpan="3" Grid.RowSpan="3" ItemsSource="{Binding Path=PreviousResults}" AutoGenerateColumns="False">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Minimum" Width="87" Binding="{Binding Min}"/>
                 <DataGridTextColumn Header="Q1" Width="87" Binding="{Binding Q1}"/>
@@ -49,23 +49,23 @@
             </DataGrid.Columns>
         </DataGrid>
         
-        <Button x:Name="CalculateButton" Grid.Row="3" Grid.Column="5" Content="Calculate" Margin="8" Command="{Binding Path=CalculateCommand}"/>
+        <Button x:Name="CalculateButton" Grid.Row="3" Grid.Column="5" Content="Calculate" Margin="8" Command="{Binding Path=SubmitCommand}"/>
 
         <Label Grid.Row="4" Grid.Column="1" Content="Minimum" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
-        <TextBox  Grid.Row="5" Grid.Column="1" Margin="8" IsReadOnly="True" Text="{Binding Path=Min}" IsEnabled="{Binding ElementName=CalculateButton, Path=IsEnabled}"/>
+        <TextBox  Grid.Row="5" Grid.Column="1" Margin="8" IsReadOnly="True" Text="{Binding Path=PreviousResult.Min, Mode=OneWay}" IsEnabled="{Binding ElementName=SubmitCommand, Path=IsEnabled}"/>
 
         <Label Grid.Row="4" Grid.Column="2" Content="Q1" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
-        <TextBox  Grid.Row="5" Grid.Column="2" Margin="8" IsReadOnly="True" Text="{Binding Path=Q1}"/>
+        <TextBox  Grid.Row="5" Grid.Column="2" Margin="8" IsReadOnly="True" Text="{Binding Path=PreviousResult.Q1}"/>
 
         <Label Grid.Row="4" Grid.Column="3" Content="Median" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
-        <TextBox Grid.Row="5" Grid.Column="3" Margin="8" IsReadOnly="True" Text="{Binding Path=Med}"/>
+        <TextBox Grid.Row="5" Grid.Column="3" Margin="8" IsReadOnly="True" Text="{Binding Path=PreviousResult.Med}"/>
 
         <Label Grid.Row="4" Grid.Column="4" Content="Q3" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
-        <TextBox  Grid.Row="5" Grid.Column="4" Margin="8" IsReadOnly="True" Text="{Binding Path=Q3}"/>
+        <TextBox  Grid.Row="5" Grid.Column="4" Margin="8" IsReadOnly="True" Text="{Binding Path=PreviousResult.Q3}"/>
 
 
         <Label Grid.Row="4" Grid.Column="5" Content="Maximum" VerticalAlignment="Bottom" HorizontalAlignment="Center"/>
-        <TextBox  Grid.Row="5" Grid.Column="5" Margin="8" IsReadOnly="True" Text="{Binding Path=Max}"/>
+        <TextBox  Grid.Row="5" Grid.Column="5" Margin="8" IsReadOnly="True" Text="{Binding Path=PreviousResult.Max}"/>
 
 
 

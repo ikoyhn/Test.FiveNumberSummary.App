@@ -6,34 +6,33 @@ using System.Windows.Input;
 
 namespace FiveNumberSummary
 {
-    public class CalculateCommandDef : ICommand
+    public class RelayCommand : ICommand
     {
-        private MainViewModel _mainVM;
-
-        public CalculateCommandDef(MainViewModel mainVM)
+        public RelayCommand(Action<object> execute) : this(execute, null)
         {
-            _mainVM = mainVM;
         }
-
-        public event EventHandler CanExecuteChanged
+        public RelayCommand(Action<object> execute, Predicate<object> canExecute)
         {
-            add => CommandManager.RequerySuggested += value;
-            remove => CommandManager.RequerySuggested -= value;
+            if (execute == null)
+                throw new ArgumentNullException("execute");
+            _execute = execute;
+            _canExecute = canExecute;
         }
-
         public bool CanExecute(object parameter)
         {
-            if (string.IsNullOrEmpty(_mainVM.Input))
-                return false;
-
-            var regex = new Regex(@"[0-9]+(\.[0-9][0-9]?)?");
-            var match = regex.IsMatch(_mainVM.Input);
-            return match;
+            return _canExecute == null ? true : _canExecute(parameter);
         }
-
+        public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
         public void Execute(object parameter)
         {
-            _mainVM.Calculate();
+            _execute(parameter);
         }
+        private readonly Action<object> _execute;
+        private readonly Predicate<object> _canExecute;
     }
+
 }
